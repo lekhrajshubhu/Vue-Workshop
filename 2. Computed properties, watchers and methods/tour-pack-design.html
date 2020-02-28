@@ -51,8 +51,12 @@
     outline: none !important;
     margin-top: 10px !important;
   }
+  #root{
+    margin-top: 100px;
+  }
   #root input {
     outline: none !important;
+ 
   }
   .searchLabel {
     background: #ffca28;
@@ -197,11 +201,13 @@
       type="text"
       placeholder="Items"
       aria-label="Search"
+      v-model="searchedText"
+      @keyup="search()"
     />
     <div class="input-group-append">
       <span
         class="input-group-text amber lighten-3 searchLabel"
-        id="basic-text1"
+
         >Search</span
       >
     </div>
@@ -243,7 +249,9 @@
       </div>
     </div>
   </div>
-
+<pre>
+  {{$data}}
+</pre>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
@@ -258,14 +266,20 @@
         {id:4,name:'Tour Item four',packed:true},
       ],
       items_packed:[],
+      searchedText:'',
     },
     methods: {
       packItems(){
-        this.tourItems.map((item, index) => this.items_packed.includes(item.id) && item.packed = true);
+        this.tourItems = this.tourItems.map((item) => (this.items_packed.includes(item.id) && (item.packed = true) && item) || item);
+        this.items_packed = [];
       },
 
       unpackedItem(id){
-        this.tourItems.map((item)=> item.id == id && item.packed = false)
+        this.tourItems = this.tourItems.map((item) => ((item.id == id) && (item.packed = false) && item) || item)
+
+      },
+      search(){
+	
       }
     },
     computed: {
