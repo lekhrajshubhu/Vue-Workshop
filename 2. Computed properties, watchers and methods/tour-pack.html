@@ -44,7 +44,7 @@
       #ffffff,
       #ffefba
     ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    max-width: 500px;
+    max-width: 25vw;
   }
   .input-group.md-form.form-sm.form-2 input.amber-border {
     border: 2px solid #ffca28;
@@ -214,7 +214,6 @@
     </div>
   </div>
   <br /><br />
-
   <div class="items">
     <div class="unpackedItems">
       <div class="d-flex unpItemsTitle">
@@ -222,7 +221,8 @@
         <button
           class="btn-hover color-5"
           style="height: 30px;font-family: 'Roboto';"
-          @click="packItems()">
+          @click="packItems()"
+        >
           Add
         </button>
       </div>
@@ -250,66 +250,59 @@
       </div>
     </div>
   </div>
-  
+  <h3>This is counter : {{ counter }}</h3>
+  <tour-package msg="message" prop1="Thi is props one" @messageChanged="message =  $event" counter="counter"></tour-package>
 
-<app-tour></app-tour>
-
+<pre>
+  {{$data}}
+</pre>
 </div>
-
-
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
 <script>
 
-let tourTemplate =  {
+  let template = {
+    props:['prop1','msg','propCounter'],
+    data(){
+      return {
+        allItems:[
+        {id:1,name:'Tour Item one',packed:false},
+        {id:2,name:'Tour Item two',packed:false},
+        {id:3,name:'Tour Item three',packed:false},
+        {id:4,name:'Tour Item four',packed:true},
+      ],
 
-data() {
-
-  return {
-
-    tourItems:[
-      {id:1,name:'Tour Item one',packed:false},
-      {id:2,name:'Tour Item two',packed:false},
-      {id:3,name:'Tour Item three',packed:false},
-      {id:4,name:'Tour Item four',packed:true},
-    ],
-
+      msg:'',
+      }
+    },
+    methods: {
+      changeMessage() {
+        this.msg = event.target.value;
+        this.$emit('messageChanged',this.msg);
+      },
+      increaseVal(){
+        this.propCounter++;
+        
+      }
+    },
+    template : `
+      <div>
+      <h3>This is compoment one - {{ this.prop1}}</h3?
+       <h3>This is props from the parent component {{this.msg}}</h3>
+        <h4>Child counter {{ propCounter }} </h4>
+       <button @click="increaseVal()">Increse</button>
+      
+        <ul>
+          <li v-for="item in allItems">{{ item.name }}</li>
+        </ul>
+        <input type="text" :value="msg" @input="changeMessage"/>
+        <p>{{msg}}</p>
+      </div>
+    `
   }
 
-},
 
-template: `
-  <div>
-    <ul>
-      <li v-for="item in tourItems"> {{item.name}} </li>
-    </ul>
-  </div>
-
-`
-
-};
-
-
-Vue.component('app-tour', tourTemplate);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  Vue.component('tour-package',template);
 
   let vm = new Vue({
     el : "#root",
@@ -322,6 +315,7 @@ Vue.component('app-tour', tourTemplate);
       ],
       items_packed:[],
       searchedText:'',
+      counter:0,
       message:'This is message from parent component',
     },
     methods: {
@@ -337,6 +331,10 @@ Vue.component('app-tour', tourTemplate);
       search(){
 	
       },
+
+      clickMe(){
+        this.counter++;
+      }
     },
     computed: {
       renderUnpackedItems(){
@@ -348,9 +346,4 @@ Vue.component('app-tour', tourTemplate);
       }
     }
   });
-
-
-
-
-
 </script>
