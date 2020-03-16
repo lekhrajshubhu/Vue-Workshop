@@ -18,12 +18,19 @@
                </div>
                <div class="col-md-9 col-lg-9">
                    <div id="topSearch">
-                       <div><h4>All Movies List </h4></div>
+                       <div><h4>All Movies List count : {{ count }}, name  -  {{username}} {{formattedName}}</h4>
+                        <!-- <button class="btn btn-success btn-sm" @click="increase()">Inrease</button>
+                        <button class="btn btn-primary btn-sm" @click="decrease()">Decrease</button> -->
+                        
+                            <!-- <custom-button btnClass="btn-sm btn-success" @on-handle-click="increase">Plus (+)</custom-button>
+                            <button-primary @on-handle-click="decrease"> Minus (-)</button-primary> -->
+                       
+                       </div>
                        <div><input type="Search Here" class="search-input"><i class="fas fa-search"></i></div>
                    </div>
                    <div class="moviesCard">
                         <div class="movieCardItem" v-for="(movie, index) in movies" :key="index">
-                            <div style="width:max-content; position:relative">
+                            <div style="width:min-content; position:relative">
                                 <div class="imageWrapper">    
                                     <img :src="movie.image.medium" alt="Image">
                                 </div>
@@ -42,11 +49,13 @@
 </template>
 <script>
 import axios from 'axios'
+import  { mapState, mapGetters } from 'vuex'
 export default {
     data() {
         return {
             movies:[],
             profileImage: "https://robohash.org/24.218.243.24.png",
+            count:0,
         }
     },
     mounted() {
@@ -58,8 +67,21 @@ export default {
     },
 
     methods: {
-        
-    }
+        increase(){
+            this.count ++;
+        },
+        decrease(){
+            this.count --;
+        }
+    },
+    computed :{
+        ...mapState({
+            username :'name',
+        }),
+
+        ...mapGetters(['formattedName'])
+    } 
+
 }
 </script>
 
